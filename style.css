@@ -1,0 +1,27 @@
+h1 {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid black; */
+    width: fit-content;
+    height: auto;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+.container div div {
+    border: 1px solid black;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.row1, .row2, .row3 {
+    display: flex;    
+}

@@ -55,7 +55,7 @@ let gameBoard = (function () {
     }
     let result = gameResult();
     console.log(result);
-    return {board, placeMarker};
+    return {board, placeMarker, gameResult};
 })();
 
 //Create new player objects
@@ -65,6 +65,24 @@ function player(name) {
 }
 
 let gameController = function () {
-    let turn = 0;
+    let turn = 1;
 
 }
+
+function displayBoard() {
+    let divId = 1;//variable to store  the ids of the board cells(ordered from 1 to 9 in row-wise manner)
+    for(let i = 0; i < gameBoard.board.length; i++) {
+        for(let j = 0; j < gameBoard.board.length; j++) {
+            let div = document.getElementById(divId);
+            if(gameBoard.board[i][j] == 1) { 
+            div.textContent = "X";
+            }
+            else if(gameBoard.board[i][j] == 2) {
+                div.textContent = "O";
+            }
+            divId++;
+        }
+    }
+}
+
+displayBoard();
