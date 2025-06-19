@@ -54,6 +54,8 @@ let gameBoard = (function () {
                 }
             }
         }
+
+        return "Draw";//Game ends in a draw
     }
 
     return {board, placeMarker, gameResult};
@@ -65,16 +67,19 @@ function player(name) {
 
 }
 
+//Control the flow of the game
 let gameController = function () {
     let turn = 1;
     let marker;
     let cells = document.querySelectorAll(".container div div");
     Array.from(cells).forEach((cell) => {
         cell.addEventListener("click", (event) => {
+            //If cell is already marked or game is over, do not take input
             if(cell.textContent != 0 || gameBoard.gameResult()) {
                 return;
             }
 
+            //Specify marker for the player and switch turns
             if(turn == 1) {
                 marker = 1;
                 turn = 2;
@@ -84,12 +89,13 @@ let gameController = function () {
                 turn = 1;
             }
 
-
+            //Place the marker on the clicked cell
             gameBoard.placeMarker(cell.dataset.row, cell.dataset.column, marker);
         })
     })
 }
 
+//Display the current status of the board
 function displayBoard() {
     let divId = 1;//variable to store  the ids of the board cells(ordered from 1 to 9 in row-wise manner)
     for(let i = 0; i < gameBoard.board.length; i++) {
@@ -105,6 +111,7 @@ function displayBoard() {
         }
     }
 
+    //Display winner upon game end
     let para = document.querySelector(".winner");
     let winningMarker = gameBoard.gameResult();
     if(winningMarker == 1) {
@@ -112,6 +119,11 @@ function displayBoard() {
     }
     else if(winningMarker == 2) {
         para.textContent = "Player 2 wins!"
+    }
+
+    //Game ends in draw
+    if(winningMarker == "Draw") {
+        para.textContent = "The game ends in a draw!"
     }
 }
 
