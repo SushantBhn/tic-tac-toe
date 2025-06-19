@@ -7,34 +7,36 @@ let gameBoard = (function () {
     1-player 1
     2-player 2*/
     let board = [
-        [1, 0, 0], 
-        [0, 1, 0], 
-        [2, 2, 1]
+        [0, 0, 0], 
+        [0, 0, 0], 
+        [0, 0, 0]
     ];
-    console.log(board);
 
     //Place markers of players
     function placeMarker (row, column, marker) {
         board[row][column] = marker;
+        displayBoard();
     }
 
     //Check if the game is over
     function gameResult() {
         for(let i = 0; i < rows; i++) {
             for(let j = 0; j < cols; j++) {
-                // console.log(board[i][j]);
+                if(board[i][j] == 0) {
+                    return;
+                }
 
                 //Check for column-wise match
                 if(i == 1) {
                     if(board[i][j] == board[i - 1][j] && board[i][j] == board[i + 1][j]) {
-                        return `Player ${board[i][j]} wins by column`;
+                        return board[i][j];
                     }
                 }
 
                 //Check for row-wise match
                 if(j == 1) {
                     if(board[i][j] == board[i][j - 1] && board[i][j] == board[i][j + 1]) {
-                        return `Player ${board[i][j]} wins by row`;
+                        return board[i][j];
                     }
                 }
 
@@ -42,19 +44,18 @@ let gameBoard = (function () {
                 if(i == 1 && j == 1) {
                     //Check for  left diagonal match
                     if(board[i][j] == board[i - 1][j - 1] && board[i][j] == board[i + 1][j + 1]) {
-                        return `Player ${board[i][j]} wins by left diagonal`;
+                        return board[i][j];
                     }
 
                     //Check for right diagonal match
                     else if(board[i][j] == board[i - 1][j + 1] && board[i][j] == board[i + 1][j - 1]) {
-                        return `Player ${board[i][j]} wins by right diagonal`;
+                        return board[i][j];
                     }
                 }
             }
         }
     }
-    let result = gameResult();
-    console.log(result);
+
     return {board, placeMarker, gameResult};
 })();
 
@@ -66,7 +67,27 @@ function player(name) {
 
 let gameController = function () {
     let turn = 1;
+    let marker;
+    let cells = document.querySelectorAll(".container div div");
+    Array.from(cells).forEach((cell) => {
+        cell.addEventListener("click", (event) => {
+            if(cell.textContent != 0 || gameBoard.gameResult()) {
+                return;
+            }
 
+            if(turn == 1) {
+                marker = 1;
+                turn = 2;
+            }
+            else if(turn == 2) {
+                marker = 2;
+                turn = 1;
+            }
+
+
+            gameBoard.placeMarker(cell.dataset.row, cell.dataset.column, marker);
+        })
+    })
 }
 
 function displayBoard() {
@@ -83,6 +104,15 @@ function displayBoard() {
             divId++;
         }
     }
+
+    let para = document.querySelector(".winner");
+    let winningMarker = gameBoard.gameResult();
+    if(winningMarker == 1) {
+        para.textContent = "Player 1 wins!"
+    }
+    else if(winningMarker == 2) {
+        para.textContent = "Player 2 wins!"
+    }
 }
 
-displayBoard();
+gameController();
